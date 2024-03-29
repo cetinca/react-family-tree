@@ -3,23 +3,37 @@ import GrandParent from "./GrandParent"
 
 export default function App() {
     const [count, setCount] = React.useState(0)
+    const [darkMode, setDarkMode] = React.useState(false)
 
-    function increment() {
+    // use callback to avoid renders while passing a function as prop
+    const increment = React.useCallback(() => {
         setCount(prevCount => prevCount + 1)
-    }
+    }, [setCount])
     
-    function decrement() {
+    const decrement = React.useCallback(() => {
         setCount(prevCount => prevCount - 1)
-    }
+    }, [setCount])
+
+    // use memo to avoid renders while passing objects as prop
+    const style = React.useMemo(() => {
+        return {
+            backgroundColor: darkMode ? "#2b283a" : "#e9e3ff",
+            color: darkMode ? "#e9e3ff" : "#2b283a",
+        }
+    }, [darkMode])
+
 
     console.log("[GP] [P] [C] [GC] APP just rendered")
     return (
-        <div>
-            <button onClick={decrement}>-1</button>
-            <button onClick={increment}>+1</button>
-            <h2>{count}</h2>
+        <div className="container">
+            <button onClick={decrement}>-</button>
+            <button onClick={increment}>+</button>
+            <h2>Count: {count}</h2>
+            <button onClick={() => setDarkMode(prev => !prev)}>
+                {darkMode ? "Switch to Light" : "Switch to Dark"}
+            </button>
             <p>App component</p>
-            <GrandParent count={count} />
+            <GrandParent style={style} increment={increment} />
             <GrandParent />
         </div>
     )

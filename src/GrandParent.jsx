@@ -1,13 +1,18 @@
 import React from "react"
 import Parent from "./Parent"
+import { sleep } from "./utils"
 
-export default function GrandParent({ count }) {
+function GrandParent({ style, increment }) {
+    sleep(30)
     console.log("[👴🏼]   [ ]   [ ]   [ ] rendered")
     return (
-        <div className="grandparent">
-            <p>GrandParent Component. Count: {count}</p>
+        <div className="grandparent" style={style}>
+            <p>GrandParent Component <button onClick={increment}>+</button></p>
             <Parent />
             <Parent />
         </div>
     )
 }
+
+// use memo to avoid renders if props are not changed
+export default React.memo(GrandParent)
